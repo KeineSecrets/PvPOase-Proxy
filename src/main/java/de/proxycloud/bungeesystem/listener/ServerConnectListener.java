@@ -1,7 +1,6 @@
 package de.proxycloud.bungeesystem.listener;
 
 import de.proxycloud.bungeesystem.BungeeSystem;
-import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ServerConnectEvent;
@@ -12,7 +11,6 @@ import net.md_5.bungee.config.YamlConfiguration;
 import net.md_5.bungee.event.EventHandler;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Developer ProxyCloud
@@ -39,8 +37,8 @@ public class ServerConnectListener implements Listener
                 {
                     this.configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(BungeeSystem.getInstance().getFile());
                     event.setCancelled(true);
-                    player.disconnect(new TextComponent("§7Du §7wurdest §7vom §e" + this.configuration.getString("server.name") + " §7Netzwerk §c§lgebannt§8. \n\n §7Grund §8» §c"
-                            + BungeeSystem.getInstance().getBanManager().getReason(player.getUniqueId().toString()) + " \n §7Verbleibende Zeit §8» §e"
+                    player.disconnect(new TextComponent("§fYou §fwere §fbanned §ffrom §fthe §2§lPVPOASE §a§lNETWORK§f!\n\n§fReason §8» §7"
+                            + BungeeSystem.getInstance().getBanManager().getReason(player.getUniqueId().toString()) + " \n §fTime §fremaining §8» §7"
                             + BungeeSystem.getInstance().getBanManager().getRemainingTime(player.getUniqueId().toString())));
                 }
                 catch(IOException e)
@@ -59,7 +57,7 @@ public class ServerConnectListener implements Listener
                         if(BungeeSystem.getInstance().getNotifyCache().get(players.getUniqueId().toString()) == 0)
                         {
                             players.sendMessage(new TextComponent(BungeeSystem.getInstance().getPrefix() + " "));
-                            players.sendMessage(new TextComponent(BungeeSystem.getInstance().getPrefix() + BungeeSystem.getInstance().getPrefixCache().get(player.getUniqueId().toString()) + player.getName() + " §7wurde vom §eSystem §a§lentbannt§8."));
+                            players.sendMessage(new TextComponent(BungeeSystem.getInstance().getPrefix() + BungeeSystem.getInstance().getPrefixCache().get(player.getUniqueId().toString()) + player.getName() + " §fwas §funbanned §fby §bCloud§8."));
                             players.sendMessage(new TextComponent(BungeeSystem.getInstance().getPrefix() + " "));
                         }
                     }
@@ -67,62 +65,8 @@ public class ServerConnectListener implements Listener
             }
         }
 
-        if(BungeeSystem.getInstance().getMaintenanceManager().getMaintenance() == 1)
-        {
-            if(!(player.hasPermission("system.maintenance.bypass")))
-            {
-                event.setCancelled(true);
-                player.disconnect(new TextComponent(BungeeSystem.getInstance().getPrefix() + " §cWir befinden uns zurzeit in §c§lWartungsarbeiten§8."));
-            }
-        }
-
         BungeeSystem.getInstance().getProxy().getScheduler().runAsync(BungeeSystem.getInstance(), () ->
         {
-            if(!(BungeeSystem.getInstance().getGroupManager().isRegistered(player.getUniqueId().toString())))
-            {
-                if(player.hasPermission("system.administrator"))
-                {
-                    BungeeSystem.getInstance().getGroupManager().registerUUID(player.getUniqueId().toString(), "Administrator");
-                }
-                else if(player.hasPermission("system.developer"))
-                {
-                    BungeeSystem.getInstance().getGroupManager().registerUUID(player.getUniqueId().toString(), "Developer");
-                }
-                else if(player.hasPermission("system.srmoderator"))
-                {
-                    BungeeSystem.getInstance().getGroupManager().registerUUID(player.getUniqueId().toString(), "SrModerator");
-                }
-                else if(player.hasPermission("system.moderator"))
-                {
-                    BungeeSystem.getInstance().getGroupManager().registerUUID(player.getUniqueId().toString(), "Moderator");
-                }
-                else if(player.hasPermission("system.supporter"))
-                {
-                    BungeeSystem.getInstance().getGroupManager().registerUUID(player.getUniqueId().toString(), "Supporter");
-                }
-                else if(player.hasPermission("system.builder"))
-                {
-                    BungeeSystem.getInstance().getGroupManager().registerUUID(player.getUniqueId().toString(), "Builder");
-                }
-                else if(player.hasPermission("system.youtuber"))
-                {
-                    BungeeSystem.getInstance().getGroupManager().registerUUID(player.getUniqueId().toString(), "YouTuber");
-                }
-                else if(player.hasPermission("system.premiumplus"))
-                {
-                    BungeeSystem.getInstance().getGroupManager().registerUUID(player.getUniqueId().toString(), "PremiumPlus");
-                }
-                else if(player.hasPermission("system.premium"))
-                {
-                    BungeeSystem.getInstance().getGroupManager().registerUUID(player.getUniqueId().toString(), "Premium");
-                }
-                else
-                {
-                    BungeeSystem.getInstance().getGroupManager().registerUUID(player.getUniqueId().toString(), "Spieler");
-                }
-                BungeeSystem.getInstance().getPrefixCache().put(player.getUniqueId().toString(), BungeeSystem.getInstance().getPrefixManager().getPrefix(player.getUniqueId().toString()));
-                return;
-            }
             BungeeSystem.getInstance().getPrefixCache().put(player.getUniqueId().toString(), BungeeSystem.getInstance().getPrefixManager().getPrefix(player.getUniqueId().toString()));
             if(player.hasPermission("system.notify"))
             {
@@ -142,30 +86,6 @@ public class ServerConnectListener implements Listener
                 }
             }
         });
-
-        BungeeSystem.getInstance().getProxy().getScheduler().schedule(BungeeSystem.getInstance(), () ->
-        {
-            for(ProxiedPlayer players : BungeeSystem.getInstance().getProxy().getPlayers())
-            {
-                try
-                {
-                    this.configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(BungeeSystem.getInstance().getFile());
-                    BaseComponent[] headerComponent = TextComponent.fromLegacyText("\n  §e" + this.configuration.getString("server.name") +" §8┃ §7Dein §aMinecraft §7Netzwerk §8» §e1.8 \n " +
-                            "§7Es sind gerade §8» §e" + BungeeSystem.getInstance().getProxy().getPlayers().size() + "§8/§e" + BungeeSystem.getInstance().getProxy().getConfig().getPlayerLimit()
-                            + " \n §7Aktueller Server §8» §e" + players.getServer().getInfo().getName() + "  \n");
-                    BaseComponent[] footerComponent = TextComponent.fromLegacyText("\n  §7Teamspeak³ §8» §e" + this.configuration.getString("server.teamspeak") + " \n §7Twitter §8» §e" + this.configuration.getString("server.twitter") + "\n §7Shop §8» §e" + this.configuration.getString("server.shop") + "  \n");
-                    players.setTabHeader(headerComponent, footerComponent);
-                }
-                catch(NullPointerException e)
-                {
-                    System.out.println("No server founded");
-                }
-                catch(IOException e)
-                {
-                    e.printStackTrace();
-                }
-            }
-        }, 1, TimeUnit.SECONDS);
     }
 
 }

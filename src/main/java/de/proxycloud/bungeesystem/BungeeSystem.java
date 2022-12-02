@@ -98,14 +98,6 @@ public class BungeeSystem extends Plugin
 
             try
             {
-                if(!(this.motdManager.isMOTD()))
-                {
-                    this.motdManager.buildMOTD("&eProxyCloud &8| &7Dein &aMinecraft &7Netzwerk &8» &e1.8", " &8» &a&lONLINE &8× &7BungeeSystem &aUpdate &8» &7alles &a&lbesser", "&eProxyCloud &8| &7Dein &aMinecraft &7Netzwerk &8» &e1.8", " &8» &7Wir §7befinden &7uns &7in &c&lWartungsarbeiten");
-                }
-                if(!(this.maintenanceManager.isMaintenance()))
-                {
-                    this.maintenanceManager.buildMaintenance(0);
-                }
                 List<String> uuid = this.groupManager.getAllUUIDs();
                 for(String string : uuid)
                 {
@@ -132,18 +124,6 @@ public class BungeeSystem extends Plugin
                 System.out.println(" ");
             }
         });
-        System.out.println(" ");
-        System.out.println("______                             _____           _                 ");
-        System.out.println("| ___ \\                           /  ___|         | |                ");
-        System.out.println("| |_/ /_   _ _ __   __ _  ___  ___\\ `--. _   _ ___| |_ ___ _ __ ___  ");
-        System.out.println("| ___ \\ | | | '_ \\ / _` |/ _ \\/ _ \\`--. \\ | | / __| __/ _ \\ '_ ` _ \\ ");
-        System.out.println("| |_/ / |_| | | | | (_| |  __/  __/\\__/ / |_| \\__ \\ ||  __/ | | | | |");
-        System.out.println("\\____/ \\__,_|_| |_|\\__, |\\___|\\___\\____/ \\__, |___/\\__\\___|_| |_| |_|");
-        System.out.println("                    __/ |                 __/ |                      ");
-        System.out.println("                   |___/                 |___/                       ");
-        System.out.println(" ");
-        System.out.println("Coded by ProxyCloud | Discord: ProxyCloud#5588");
-        System.out.println(" ");
     }
 
     @Override
@@ -154,18 +134,6 @@ public class BungeeSystem extends Plugin
         {
             this.prefixCache.clear();
         }
-        System.out.println(" ");
-        System.out.println("______            ");
-        System.out.println("| ___ \\           ");
-        System.out.println("| |_/ /_   _  ___ ");
-        System.out.println("| ___ \\ | | |/ _ \\");
-        System.out.println("| |_/ / |_| |  __/");
-        System.out.println("\\____/ \\__, |\\___|");
-        System.out.println("        __/ |     ");
-        System.out.println("       |___/      ");
-        System.out.println(" ");
-        System.out.println("See you next Time!");
-        System.out.println(" ");
     }
 
     private void init()
@@ -173,13 +141,9 @@ public class BungeeSystem extends Plugin
         this.getProxy().getPluginManager().registerListener(this, new ServerConnectListener());
         this.getProxy().getPluginManager().registerListener(this, new ServerSwitchListener());
         this.getProxy().getPluginManager().registerListener(this, new PlayerDisconnectListener());
-        this.getProxy().getPluginManager().registerListener(this, new ProxyPingListener());
         this.getProxy().getPluginManager().registerListener(this, new ChatListener());
 
-        this.getProxy().getPluginManager().registerCommand(this, new MaintenanceCommand("maintenance"));
-        this.getProxy().getPluginManager().registerCommand(this, new DefaultMOTDCommand("defaultmotd"));
-        this.getProxy().getPluginManager().registerCommand(this, new MaintenanceMOTDCommand("maintenancemotd"));
-        this.getProxy().getPluginManager().registerCommand(this, new NetzwerkstopCommand("netzwerkstop"));
+        this.getProxy().getPluginManager().registerCommand(this, new NetzwerkstopCommand("stopnetwork"));
         this.getProxy().getPluginManager().registerCommand(this, new BroadcastCommand("bc"));
         this.getProxy().getPluginManager().registerCommand(this, new BungeeCommand("bungee"));
         this.getProxy().getPluginManager().registerCommand(this, new BungeeCommand("bungeecord"));
@@ -263,16 +227,16 @@ public class BungeeSystem extends Plugin
                 this.configuration.set("mysql.username", "root");
                 this.configuration.set("mysql.password", "");
 
-                this.configuration.set("prefix", "&2•&a● Bungee &8▎ ");
-                this.configuration.set("report", "&4•&c● Report &8▎ ");
-                this.configuration.set("team", "&6•&e● TEAM &8▎ ");
-                this.configuration.set("party", "&d•&5● Party &8▎ ");
-                this.configuration.set("friend", "&9•&3● Freunde &8▎ ");
+                this.configuration.set("prefix", "§8〢 §b§lCLOUD §8▪ §7");
+                this.configuration.set("report", "§8〢 §b§lCLOUD §8▪ §7 ");
+                this.configuration.set("team", "§8〢 §c§lTEAM §8▪ §7");
+                this.configuration.set("party", "§8〢 §5§lPARTY §8▪ §7");
+                this.configuration.set("friend", "§8〢 §a§lFRIENDS §8▪ §7");
 
-                this.configuration.set("server.name", "DeinServerDE");
-                this.configuration.set("server.teamspeak", "ts.DeinServer.de");
-                this.configuration.set("server.twitter", "@DeinServerDE");
-                this.configuration.set("server.shop", "shop.DeinServer.de");
+                this.configuration.set("server.name", "PVPOASE NETWORK");
+                this.configuration.set("server.teamspeak", "ts.pvpoase.gg");
+                this.configuration.set("server.twitter", "@PvPOaseNET");
+                this.configuration.set("server.shop", "shop.pvpoase.gg");
                 ConfigurationProvider.getProvider(YamlConfiguration.class).save(this.configuration, this.file);
             }
             catch(IOException e)
